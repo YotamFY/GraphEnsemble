@@ -5,3 +5,4 @@
   * Cross validation support
   * More examples
   * Keras wrappers
+  * Setup
