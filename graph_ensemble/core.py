@@ -8,6 +8,7 @@ class Node(object):
     def __init__(self):
         self._input = None
         self._output = None
+        self._fitted = False
 
     @staticmethod
     def validate_type(node):
@@ -18,8 +19,9 @@ class Node(object):
         Node.validate_type(inp)
         self._input = inp
 
-    def clear_output(self):
+    def clear(self):
         self._output = None
+        self._fitted = False
 
     @property
     def input(self):
@@ -30,9 +32,11 @@ class Node(object):
         pass
 
     def fit(self, y):
-        self._input.fit(y)
-        train_data = self._input.get_output()
-        self._fit(train_data, y)
+        if not self._fitted:
+            self._input.fit(y)
+            train_data = self._input.get_output()
+            self._fit(train_data, y)
+            self._fitted = True
 
     def _fit(self, X, y):
         pass
@@ -101,7 +105,7 @@ class Graph(object):
 
     def _clear_path(self, node):
         if node is not None:
-            node.clear_output()
+            node.clear()
             if type(node.input) is list:
                 for inp in node.input:
                     self._clear_path(inp)
