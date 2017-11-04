@@ -1,6 +1,6 @@
 # GraphEnsemble
 
-# Coming up next:
+## Coming up next:
   * Documentation
   * Cross validation support
   * More examples
