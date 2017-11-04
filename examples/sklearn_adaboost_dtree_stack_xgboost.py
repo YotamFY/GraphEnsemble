@@ -1,6 +1,6 @@
 from graph_ensemble import Graph
-from graph_ensemble.nodes import Concatenate
-from graph_ensemble.wrappers import SKLearnNode, Input
+from graph_ensemble.nodes import Concatenate, Input, Reshape
+from graph_ensemble.wrappers import SKLearnNode
 from xgboost import XGBRegressor
 from sklearn.ensemble import AdaBoostRegressor
 from sklearn.tree import DecisionTreeRegressor
@@ -14,12 +14,18 @@ print y.shape
 inp = Input()
 ab = SKLearnNode(AdaBoostRegressor())
 ab.set_input(inp)
+ab_reshape = Reshape((-1, 1))
+ab_reshape.set_input(ab)
 dtree = SKLearnNode(DecisionTreeRegressor())
 dtree.set_input(inp)
-concat = Concatenate([ab, dtree])
+dtree_reshape = Reshape((-1, 1))
+dtree_reshape.set_input(dtree)
+concat = Concatenate([ab_reshape, dtree_reshape], axis=-1)
+xgbreg = SKLearnNode(XGBRegressor())
+xgbreg.set_input(concat)
 
-graph = Graph(inp, concat)
+graph = Graph(inp, xgbreg)
 
 graph.fit(X, y)
-print graph.predict(X).shape
+print graph.predict(X)
 
