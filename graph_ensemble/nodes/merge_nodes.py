@@ -74,7 +74,7 @@ class TensorDot(Merge):
         self._axis = axis
 
     def _tensordot(self, a, b):
-        return np.tensordot(a, b, axis=self._axis)
+        return np.tensordot(a, b, axes=self._axis)
 
     def _merge_function(self, arrays):
         return reduce(self._tensordot, arrays)
@@ -86,7 +86,7 @@ class Mean(Merge):
         self._axis = axis
 
     def _merge_function(self, arrays):
-        return np.mean(arrays, axes=self._axis)
+        return np.mean(arrays, axis=self._axis)
 
 
 class WeightedAverage(Merge):
