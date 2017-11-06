@@ -87,13 +87,9 @@ class Graph(object):
             inp = (inp,) * len(nodes)
         return inp
 
-    def _set_inputs(self, X, X_test):
-        if X_test is not None:
-            for inp_node, X_arr, X_test_arr in zip(self._input_nodes, X, X_test):
-                inp_node.store(X_arr, X_test_arr)
-        else:
-            for inp_node, X_arr in zip(self._input_nodes, X):
-                inp_node.store(X_arr, None)
+    def _set_inputs(self, X):
+        for inp_node, X_arr in zip(self._input_nodes, X):
+            inp_node.store(X_arr)
 
     def fit(self, X_train, y_train):
         X_train = self._validate_input(X_train, self._input_nodes)
