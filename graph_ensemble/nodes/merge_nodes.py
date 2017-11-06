@@ -86,11 +86,11 @@ class Mean(Merge):
         self._axis = axis
 
     def _merge_function(self, arrays):
-        return np.mean(arrays, axis=self._axis)
+        return np.mean(arrays, axes=self._axis)
 
 
 class WeightedAverage(Merge):
-    def __init__(inputs=None, axis=None, weights=None):
+    def __init__(self, inputs=None, axis=None, weights=None):
         super(WeightedAverage, self).__init__(inputs=inputs)
         self._axis = axis
         self._weights = weights
@@ -100,7 +100,7 @@ class WeightedAverage(Merge):
 
 
 class Median(Merge):
-    def __init__(inputs=None, axis=None):
+    def __init__(self, inputs=None, axis=None):
         super(Median, self).__init__(inputs=inputs)
         self._axis = axis
 
