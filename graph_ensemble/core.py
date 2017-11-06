@@ -57,9 +57,9 @@ class Input(Node):
 
 
 class Graph(object):
-    def __init__(self, input_nodes, output_nodes):
-        self._input_nodes = Graph._get_node_list(input_nodes) 
-        self._output_nodes = Graph._get_node_list(output_nodes) 
+    def __init__(self, input_nodes, output_node):
+        self._input_nodes = Graph._get_node_list(input_nodes)
+        self._output_node = output_node
 
     @staticmethod
     def _get_node_list(nodes):
@@ -73,21 +73,18 @@ class Graph(object):
 
     @property
     def input_nodes(self):
-        return self._input_nodes[:]
+        return self._input_nodes
 
     @property
-    def output_nodes(self):
-        return self._output_nodes[:]
+    def output_node(self):
+        return self._output_node
 
     def _validate_input(self, inp, nodes):
-        if type(inp) is list:
+        if type(inp) is tuple:
             if len(inp) != len(nodes):
-                raise ValueError('Number of input arrays (%d) does not match the number of nodes (%d)' % (len(inp), len(nodes)))
+                raise ValueError('Number of inputs (%d) does not match the number of input nodes (%d)' % (len(inp), len(nodes)))
         else:
-            inp = [inp] * len(nodes)
-        for i, arr in enumerate(inp):
-            if not isinstance(arr, np.ndarray):
-                raise TypeError('Input %d is of invalid type. Must be a NumPy array' % i)
+            inp = (inp,) * len(nodes)
         return inp
 
     def _set_inputs(self, X):
@@ -96,10 +93,8 @@ class Graph(object):
 
     def fit(self, X_train, y_train):
         X_train = self._validate_input(X_train, self._input_nodes)
-        y_train = self._validate_input(y_train, self._output_nodes)
         self._set_inputs(X_train)
-        for out_node, y_train_arr in zip(self._output_nodes, y_train):
-            out_node.fit(y_train_arr)
+        self._output_node.fit(y_train)
         self._clear_nodes()
         return self
 
@@ -113,13 +108,12 @@ class Graph(object):
                 self._clear_path(node.input)
 
     def _clear_nodes(self):
-        for node in self._output_nodes:
-            self._clear_path(node)
+        self._clear_path(self._output_node)
 
     def predict(self, X):
         X = self._validate_input(X, self._input_nodes)
         self._set_inputs(X)
-        preds = [output_node.get_output() for output_node in self._output_nodes]
+        preds = self._output_node.get_output()
         self._clear_nodes()
         if len(preds) == 1:
             preds = preds[0]
