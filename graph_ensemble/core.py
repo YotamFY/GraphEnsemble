@@ -115,7 +115,5 @@ class Graph(object):
         self._set_inputs(X)
         preds = self._output_node.get_output()
         self._clear_nodes()
-        if len(preds) == 1:
-            preds = preds[0]
         return preds
 
