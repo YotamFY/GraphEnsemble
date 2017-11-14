@@ -1,7 +1,7 @@
 # GraphEnsemble
 
 ## Coming up next:
-  * Documentation
+  * -Documentation-
   * Cross validation support
   * More examples
   * Keras wrappers
