@@ -6,5 +6,9 @@ Each node learns the predcitions of its input node(s) and provides its predictio
 Graphs can be of any depth and width. In addition, this package provides utility nodes such as several merging nodes and shape manipulation.
 """
 
+
+__version__ = '0.0.1a0'
+
+
 from core import *
 
