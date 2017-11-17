@@ -1,7 +1,7 @@
 from graph_ensemble import Graph
 from graph_ensemble.nodes import Concatenate, Input, Reshape
 from graph_ensemble.wrappers import SKLearnNode
-from xgboost import XGBRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.ensemble import AdaBoostRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn import datasets
@@ -23,10 +23,10 @@ dtree.set_input(inp2)
 dtree_reshape = Reshape((-1, 1))
 dtree_reshape.set_input(dtree)
 concat = Concatenate([ab_reshape, dtree_reshape], axis=-1)
-xgbreg = SKLearnNode(XGBRegressor())
-xgbreg.set_input(concat)
+gbreg = SKLearnNode(GradientBoostingRegressor())
+gbreg.set_input(concat)
 
-graph = Graph([inp1, inp2], xgbreg)
+graph = Graph([inp1, inp2], gbreg)
 
 graph.fit((X1, X2), y)
 print graph.predict((X1, X2))
